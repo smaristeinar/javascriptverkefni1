@@ -10,13 +10,14 @@ const height = canvas.height = window.innerHeight;
 
 
 class Bolti {
-  constructor(x,  y, velX, velY, color, size/*dót til að búatil bolltar*/) {
+  constructor(x,  y, velX, velY, color, size, id/*dót til að búatil bolltar*/) {
     this.x = x;
     this.y = y;
     this.velX = velX;
     this.velY = velY;
     this.color = color;
     this.size = size;
+    this.id = id;
   }
 
   draw(/*teikna boltana*/){
@@ -46,7 +47,17 @@ class Bolti {
     this.x += this.velX;
       this.y += this.velY;
       }
+
+  coll(listiafboltum){
+    for (let i = 0; i < listiafboltum.length; i++){
+      if (listiafboltum[i].x == this.x && listiafboltum[i].y == this.y && listiafboltum[i].id != this.id){
+        listiafboltum.splice(i,i);
+      }
     }
+  }
+
+
+  }
 
 
 function random(min, max) {
@@ -59,17 +70,19 @@ function random(min, max) {
 
 
 let boltar = [];
-
+let idval = 0;
 while (boltar.length < 25) {
-  let size = random(10,20);
+  let size = random(50,100);
   let bolti = new Bolti(
     random(0 + size,width - size),
     random(0 + size,height - size),
     random(-7,7),
     random(-7,7),
     'rgb(' + random(0,255) + ',' + random(0,255) + ',' + random(0,255) +')',
-    size
+    size,
+    idval
   );
+  idval += 1;
   boltar.push(bolti);
 }
 
@@ -80,6 +93,7 @@ function loop() {
   for (let i = 0; i < boltar.length; i++) {
     boltar[i].draw();
     boltar[i].update();
+    boltar[i].coll(boltar);
   }
 
   requestAnimationFrame(loop);
