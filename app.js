@@ -10,7 +10,7 @@ const height = canvas.height = window.innerHeight;
 
 
 class Bolti {
-  constructor(x,  y, velX, velY, color, size, id/*dót til að búatil bolltar*/) {
+  constructor(x,  y, velX, velY, color, size, id, hp, pow/*dót til að búa til bolltar*/) {
     this.x = x;
     this.y = y;
     this.velX = velX;
@@ -18,6 +18,8 @@ class Bolti {
     this.color = color;
     this.size = size;
     this.id = id;
+    this.hp = hp;
+    this.pow = pow;
   }
 
   draw(/*teikna boltana*/){
@@ -49,12 +51,29 @@ class Bolti {
       }
 
   coll(listiafboltum){
+      /* collision aðferð */
     for (let i = 0; i < listiafboltum.length; i++){
-      if (listiafboltum[i].x == this.x && listiafboltum[i].y == this.y && listiafboltum[i].id != this.id){
-        listiafboltum.splice(i,i);
+      if (listiafboltum[i].id != this.id)
+      /*rennur í gegnum allar kúlur en sleppir sjálfum sér */
+      {
+        let _size =  this.size + listiafboltum[i].size; /*fær út samanlagðan radíus*/
+        let dist  = Math.hypot(this.x - listiafboltum[i].x, this.y - listiafboltum[i].y);
+        /*notar pýþagóras til að finna lengdina á milli kúlu */
+        if (dist < _size ) {
+          this.hp -= listiafboltum[i].pow;
+          /*ef kúlunar snertast þá ráðast þær á hvort aðra */
+          if (listiafboltum[i].hp < 0) {
+            console.log(listiafboltum[i].id, "is Dead");
+            /*og svo ef hún deyr þá hverfur hún úr listanum*/
+            listiafboltum.splice(i,1);
+          }
+        }
+
+        
       }
     }
   }
+
 
 
   }
@@ -64,6 +83,9 @@ function random(min, max) {
   const num = Math.floor(Math.random() * (max - min + 1)) + min;
   return num;
 }
+function random2(min,max) {
+  return Math.floor(Math.random() * (max - min) + min);
+}
 
 
 
@@ -71,8 +93,8 @@ function random(min, max) {
 
 let boltar = [];
 let idval = 0;
-while (boltar.length < 25) {
-  let size = random(50,100);
+while (boltar.length <25) {
+  let size = random(500,500);
   let bolti = new Bolti(
     random(0 + size,width - size),
     random(0 + size,height - size),
@@ -80,11 +102,15 @@ while (boltar.length < 25) {
     random(-7,7),
     'rgb(' + random(0,255) + ',' + random(0,255) + ',' + random(0,255) +')',
     size,
-    idval
+    idval,
+    random2(1,500),
+    random2(25,50)
   );
   idval += 1;
   boltar.push(bolti);
 }
+console.log(boltar);
+
 
 function loop() {
   ctx.fillStyle = "rgba(0,0,0,0.25)";
