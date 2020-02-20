@@ -1,4 +1,4 @@
 # javascriptverkefni1
 canvas verkefni1
 
-boltar og dót að skoppa útum allat.
+Strákanir að slát upp á líf og dauð í pittinu.
