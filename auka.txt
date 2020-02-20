@@ -65,4 +65,5 @@ class Bolti {
 
 
 
+  if ((this.y - this.size) <= 0) || (this.y + this.size) >= this.boudns)  {
   }

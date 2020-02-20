@@ -3,8 +3,10 @@
 
 }*/
 
-
 'use strict';
+let myndirnormal = [document.getElementById("markus1"),document.getElementById("oli1"),document.getElementById("snorr1")]
+let myndirangry = [document.getElementById("markus2"),document.getElementById("oli2"),document.getElementById("snorr2")]
+
 
 const canvas = document.querySelector('canvas');
 
@@ -14,7 +16,7 @@ const width = canvas.width = window.innerWidth;
 const height = canvas.height = window.innerHeight;
 
 class Shape {
-  constructor(x,  y, velX, velY, color, size, id, hp, pow, shapetype, destY, destX/*dót til að búa til bolltar*/) {
+  constructor(x,  y, velX, velY, color, size, id, hp, pow, shapetype, destY, destX,boudns,norm,ang/*dót til að búa til bolltar*/) {
     this.x = x;
     this.y = y;
     this.velX = velX;
@@ -24,11 +26,12 @@ class Shape {
     this.id = id;
     this.hp = hp;
     this.pow = pow;
-    this.destY = destY
-    this.destX = destX
-  }
-  attack(enemy){
-    enemy -= this.pow;
+    this.shapetype = shapetype;
+    this.destY = destY;
+    this.destX = destX;
+    this.boudns = boudns;
+    this.norm = norm;
+    this.ang = ang;
   }
  deli(){
   if (this.shapetype == "bolti"){
@@ -43,21 +46,23 @@ class Bolti extends Shape{
     ctx.fillStyle = this.color;
     ctx.arc(this.x, this.y, this.size, 0, 2 * Math.PI)
     ctx.fill();
+    ctx.drawImage(myndirnormal[this.norm],this.x-((this.size * 1.75)/2),this.y-((this.size * 1.75)/2),this.size * 1.75,this.size * 1.75);
+    
 }
   update(/*breytingar og hegðun á boltunum*/){
-  if ((this.x + this.size) >= width) {
+  if ((this.x + this.size) >= width ) {
     this.velX = -(this.velX);
   }
 
-  if ((this.x - this.size) <= 0) {
+  if ((this.x - this.size) <= -10) {
     this.velX = -(this.velX);
   }
 
-  if ((this.y + this.size) >= height) {
+  if ((this.y + this.size) >= height +10 ) {
     this.velY = -(this.velY);
   }
 
-  if ((this.y - this.size) <= 0) {
+  if ((this.y - this.size) <= 0 || (this.y - this.size)<= this.boudns) {
     this.velY = -(this.velY);
   }
 
@@ -75,6 +80,7 @@ class Bolti extends Shape{
         /*notar pýþagóras til að finna lengdina á milli kúlu */
         if (dist < _size ) {
           this.hp -= listiafboltum[i].pow;
+          ctx.drawImage(myndirangry[this.ang],this.x-((this.size * 1.75)/2),this.y-((this.size * 1.75)/2),this.size * 1.75,this.size * 1.75);
           /*ef kúlunar snertast þá ráðast þær á hvort aðra */
           if (listiafboltum[i].hp < 0) {
             console.log(listiafboltum[i].id, "is Dead");
@@ -138,6 +144,7 @@ let hlutir = [];
 let idval = 0;
 let firstposX = 0;
 let firstposY = 5;
+let higestsize = 0;
 while (firstposX < width) {
   let size = random(100,200);
   idval += 1;
@@ -154,29 +161,46 @@ while (firstposX < width) {
   firstposY,
   firstposX
   )
+  if (higestsize < size) {
+    higestsize = size;
+  }
   firstposX += size + 50;
   idval += 1;
   hlutir.push(kassi)
 }
 
 let tel = 0;
+let tel2 = 0;
 while (tel < 25) {
-  let size = random(100,200);
+  let size = random(50,100);
   let bolti = new Bolti(
     random(0 + size,width - size),
-    random(0 + size,height - size),
+    random(higestsize + size,height - size),
     random(-7,7),
     random(-7,7),
     'rgb(' + random(0,255) + ',' + random(0,255) + ',' + random(0,255) +')',
     size,
     idval,
-    random2(1,500),
-    random2(25,50),
-    "bolti"
+    7500,
+    random2(1,10),
+    "bolti",
+    0,
+    0,
+    higestsize,
+    tel2,
+    tel2
+ 
   );
   idval += 1;
+  if (tel2 == 2) {
+    tel2 = 0;
+  } else {
+    tel2++;
+  }
   hlutir.push(bolti);
-  tel++
+  tel++;
+
+
 }
 
 
@@ -188,7 +212,7 @@ function loop() {
     hlutir[i].draw();
     hlutir[i].update();   
     if (hlutir[i].deli() == true) {
-      console.log("hello");
+      hlutir[i].coll(hlutir);
     }
     
    
