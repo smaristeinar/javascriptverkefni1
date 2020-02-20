@@ -12,8 +12,8 @@ const canvas = document.querySelector('canvas');
 
 const ctx = canvas.getContext("2d");
 
-const width = canvas.width = window.innerWidth;
-const height = canvas.height = window.innerHeight;
+const width = canvas.width = 1500;
+const height = canvas.height = 720;
 
 class Shape {
   constructor(x,  y, velX, velY, color, size, id, hp, pow, shapetype, destY, destX,boudns,norm,ang/*dót til að búa til bolltar*/) {
@@ -205,7 +205,7 @@ while (tel < 25) {
 
 
 function loop() {
-  ctx.fillStyle = "rgba(0,0,0,0.25)";
+  ctx.fillStyle = "rgb(235, 223, 169)";
   ctx.fillRect(0,0,width, height);
 
   for (let i = 0; i < hlutir.length; i++) {
