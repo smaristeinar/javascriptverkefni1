@@ -67,3 +67,65 @@ class Bolti {
 
   if ((this.y - this.size) <= 0) || (this.y + this.size) >= this.boudns)  {
   }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    let bolti = new Bolti(
+    random(0 + size,width - size),
+    random(higestsize + size,height - size),
+    random(-7,7),
+    random(-7,7),
+    'rgb(' + random(0,255) + ',' + random(0,255) + ',' + random(0,255) +')',
+    size,
+    idval,
+    7500,
+    random2(1,10),
+    "bolti",
+    0,
+    0,
+    higestsize,
+    tel2,
+    tel2
+ 
+  );
+
+
+
+
+
+
+
+
+
+
+
+
+
+  random(0 + size,width - size),
+  random(0 + size,height - size),
+  random(-7,7),
+  random(-7,7),
+  'rgb(' + random(0,255) + ',' + random(0,255) + ',' + random(0,255) +')',
+  size,
+  idval,
+  random2(1,500),
+  random2(25,50),
+  "kassi",
+  firstposY,
+  firstposX

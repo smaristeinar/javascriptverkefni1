@@ -16,7 +16,7 @@ const width = canvas.width = 1500;
 const height = canvas.height = 720;
 
 class Shape {
-  constructor(x,  y, velX, velY, color, size, id, hp, pow, shapetype, destY, destX,boudns,norm,ang/*dót til að búa til bolltar*/) {
+  constructor(x,  y, velX, velY, color, size, id, shapetype,hp,pow/*boudns,norm,ang*//*dót til að búa til bolltar*/) {
     this.x = x;
     this.y = y;
     this.velX = velX;
@@ -24,14 +24,9 @@ class Shape {
     this.color = color;
     this.size = size;
     this.id = id;
+    this.shapetype = shapetype;
     this.hp = hp;
     this.pow = pow;
-    this.shapetype = shapetype;
-    this.destY = destY;
-    this.destX = destX;
-    this.boudns = boudns;
-    this.norm = norm;
-    this.ang = ang;
   }
  deli(){
   if (this.shapetype == "bolti"){
@@ -41,6 +36,14 @@ class Shape {
 }
 
 class Bolti extends Shape{
+  constructor(x,  y, velX, velY, color, size, id, shapetype,hp,pow,norm,ang,bounds){
+    super(x,y,velX,velY,color,size,id,shapetype,hp,pow);
+    this.norm = norm;
+    this.ang = ang;
+    this.boudns = bounds;
+
+    
+  }
   draw(/*teikna boltana*/){
     ctx.beginPath();
     ctx.fillStyle = this.color;
@@ -69,7 +72,7 @@ class Bolti extends Shape{
   this.x += this.velX;
     this.y += this.velY;
     }
-    coll(listiafboltum){
+  coll(listiafboltum){
       /* collision aðferð */
     for (let i = 0; i < listiafboltum.length; i++){
       if (listiafboltum[i].id != this.id)
@@ -79,10 +82,12 @@ class Bolti extends Shape{
         let dist  = Math.hypot(this.x - listiafboltum[i].x, this.y - listiafboltum[i].y);
         /*notar pýþagóras til að finna lengdina á milli kúlu */
         if (dist < _size ) {
-          this.hp -= listiafboltum[i].pow;
+          console.log(this.hp);
+          console.log(listiafboltum[i].pow);
+          this.hp -= listiafboltum[i].pow;/*listiafboltum[i].pow;*/
           ctx.drawImage(myndirangry[this.ang],this.x-((this.size * 1.75)/2),this.y-((this.size * 1.75)/2),this.size * 1.75,this.size * 1.75);
           /*ef kúlunar snertast þá ráðast þær á hvort aðra */
-          if (listiafboltum[i].hp < 0) {
+          if (listiafboltum[i].hp <= 0) {
             console.log(listiafboltum[i].id, "is Dead");
             /*og svo ef hún deyr þá hverfur hún úr listanum*/
             listiafboltum.splice(i,1);
@@ -96,6 +101,11 @@ class Bolti extends Shape{
 }
 
 class Kassi extends Shape {
+  constructor(x,y,velx,vely,color,size,id,shapetype,destX,destY){
+    super(x,y,velx,vely,color,size,id,shapetype);
+    this.destX = destX;
+    this.destY = destY;
+  }
   draw(/*teiknar kassa */){
     ctx.beginPath();
     ctx.fillStyle = this.color;
@@ -145,6 +155,7 @@ let idval = 0;
 let firstposX = 0;
 let firstposY = 5;
 let higestsize = 0;
+
 while (firstposX < width) {
   let size = random(100,200);
   idval += 1;
@@ -155,12 +166,10 @@ while (firstposX < width) {
   'rgb(' + random(0,255) + ',' + random(0,255) + ',' + random(0,255) +')',
   size,
   idval,
-  random2(1,500),
-  random2(25,50),
   "kassi",
-  firstposY,
-  firstposX
-  )
+  firstposX,
+  firstposY)
+  
   if (higestsize < size) {
     higestsize = size;
   }
@@ -173,24 +182,20 @@ let tel = 0;
 let tel2 = 0;
 while (tel < 25) {
   let size = random(50,100);
-  let bolti = new Bolti(
-    random(0 + size,width - size),
-    random(higestsize + size,height - size),
-    random(-7,7),
-    random(-7,7),
-    'rgb(' + random(0,255) + ',' + random(0,255) + ',' + random(0,255) +')',
-    size,
-    idval,
-    7500,
-    random2(1,10),
-    "bolti",
-    0,
-    0,
-    higestsize,
-    tel2,
-    tel2
- 
-  );
+  let bolti = new Bolti(random(0 + size,width - size),
+  random(higestsize + size,height - size),
+  random(-7,7),
+  random(-7,7),
+  'rgb(' + random(0,255) + ',' + random(0,255) + ',' + random(0,255) +')',
+  size,
+  idval,
+  "bolti",
+  0,
+  0,
+  tel2,
+  tel2,
+  higestsize)
+
   idval += 1;
   if (tel2 == 2) {
     tel2 = 0;
@@ -202,7 +207,7 @@ while (tel < 25) {
 
 
 }
-
+console.log(hlutir);
 
 function loop() {
   ctx.fillStyle = "rgb(235, 223, 169)";
