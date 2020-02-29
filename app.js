@@ -33,6 +33,9 @@ class Shape {
     return true;
   }
   }
+  _Pow(){
+    return this.pow;
+  }
 }
 
 class Bolti extends Shape{
@@ -40,10 +43,7 @@ class Bolti extends Shape{
     super(x,y,velX,velY,color,size,id,shapetype,hp,pow);
     this.norm = norm;
     this.ang = ang;
-    this.boudns = bounds;
-
-    
-  }
+    this.boudns = bounds;}
   draw(/*teikna boltana*/){
     ctx.beginPath();
     ctx.fillStyle = this.color;
@@ -81,10 +81,9 @@ class Bolti extends Shape{
         let _size =  this.size + listiafboltum[i].size; /*fær út samanlagðan radíus*/
         let dist  = Math.hypot(this.x - listiafboltum[i].x, this.y - listiafboltum[i].y);
         /*notar pýþagóras til að finna lengdina á milli kúlu */
-        if (dist < _size ) {
-          console.log(this.hp);
-          console.log(listiafboltum[i].pow);
-          this.hp -= listiafboltum[i].pow;/*listiafboltum[i].pow;*/
+        if (dist < _size && listiafboltum[i].shapetype === "bolti") {
+      
+          this.hp -= listiafboltum[i]._Pow();
           ctx.drawImage(myndirangry[this.ang],this.x-((this.size * 1.75)/2),this.y-((this.size * 1.75)/2),this.size * 1.75,this.size * 1.75);
           /*ef kúlunar snertast þá ráðast þær á hvort aðra */
           if (listiafboltum[i].hp <= 0) {
@@ -98,6 +97,8 @@ class Bolti extends Shape{
       }
     }
   }
+
+
 }
 
 class Kassi extends Shape {
@@ -190,8 +191,8 @@ while (tel < 25) {
   size,
   idval,
   "bolti",
-  0,
-  0,
+  7500,
+  random2(1,10),
   tel2,
   tel2,
   higestsize)
@@ -208,6 +209,9 @@ while (tel < 25) {
 
 }
 console.log(hlutir);
+
+
+
 
 function loop() {
   ctx.fillStyle = "rgb(235, 223, 169)";
