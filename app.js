@@ -152,7 +152,11 @@ function random2(min,max) {
 
 
 let hlutir = [];
-let idval = 0;
+
+console.log(hlutir);
+
+function build(){
+  let idval = 0;
 let firstposX = 0;
 let firstposY = 5;
 let higestsize = 0;
@@ -205,13 +209,9 @@ while (tel < 25) {
   }
   hlutir.push(bolti);
   tel++;
-
-
 }
-console.log(hlutir);
-
-
-
+}
+build();
 
 function loop() {
   ctx.fillStyle = "rgb(235, 223, 169)";
